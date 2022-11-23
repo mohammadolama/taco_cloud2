@@ -4,7 +4,7 @@ create table if not exists Taco_Order
     SERIAL
     PRIMARY
     KEY,
-    delivery_Name
+    customer_Name
     varchar
 (
     50
