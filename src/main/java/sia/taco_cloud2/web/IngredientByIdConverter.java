@@ -6,11 +6,6 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import sia.taco_cloud2.data.IngredientRepository;
 import sia.taco_cloud2.tacos.Ingredient;
-import sia.taco_cloud2.tacos.Type;
-import sia.taco_cloud2.tacos.Ingredient;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 @Slf4j

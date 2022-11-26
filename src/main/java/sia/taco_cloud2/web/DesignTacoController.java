@@ -1,6 +1,5 @@
 package sia.taco_cloud2.web;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,15 +8,15 @@ import org.springframework.web.bind.annotation.*;
 import sia.taco_cloud2.data.IngredientRepository;
 import sia.taco_cloud2.tacos.Taco;
 import sia.taco_cloud2.tacos.Ingredient;
-import sia.taco_cloud2.tacos.Type;
+import sia.taco_cloud2.tacos.TacoUDT;
+import sia.taco_cloud2.tacos.Ingredient.Type;
 
 import javax.validation.Valid;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
-@Slf4j
 @Controller
 @RequestMapping("/design")
 @SessionAttributes("tacoOrder")
@@ -26,17 +25,20 @@ public class DesignTacoController {
     private final IngredientRepository ingredientRepo;
 
     @Autowired
-    public DesignTacoController(IngredientRepository ingredientRepo) {
+    public DesignTacoController(
+            IngredientRepository ingredientRepo) {
         this.ingredientRepo = ingredientRepo;
     }
 
     @ModelAttribute
     public void addIngredientsToModel(Model model) {
-        Iterable<Ingredient> all = ingredientRepo.findAll();
-        log.info("ingredients loaded from database: " + all.toString());
+        List<Ingredient> ingredients = new ArrayList<>();
+        ingredientRepo.findAll().forEach(ingredients::add);
+
         Type[] types = Type.values();
         for (Type type : types) {
-            model.addAttribute(type.toString().toLowerCase(), filterByType((List<Ingredient>) all, type));
+            model.addAttribute(type.toString().toLowerCase(),
+                    filterByType(ingredients, type));
         }
     }
 
@@ -56,19 +58,21 @@ public class DesignTacoController {
     }
 
     @PostMapping
-    public String processTaco(@Valid Taco taco, Errors errors, @ModelAttribute TacoOrder tacoOrder) {
+    public String processTaco(
+            @Valid Taco taco, Errors errors,
+            @ModelAttribute TacoOrder tacoOrder) {
 
         if (errors.hasErrors()) {
             return "design";
         }
 
-        tacoOrder.addTaco(taco);
-        log.info("Processing taco: {}", taco);
+        tacoOrder.addTaco(new TacoUDT(taco.getName(), taco.getIngredients()));
+
         return "redirect:/orders/current";
     }
 
     private Iterable<Ingredient> filterByType(
-            List<Ingredient> ingredients, Type type) {
+            List<Ingredient> ingredients, Ingredient.Type type) {
         return ingredients
                 .stream()
                 .filter(x -> x.getType().equals(type))

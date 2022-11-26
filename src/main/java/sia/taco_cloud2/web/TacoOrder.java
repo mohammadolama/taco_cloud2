@@ -1,10 +1,14 @@
 package sia.taco_cloud2.web;
 
+import com.datastax.oss.driver.api.core.uuid.Uuids;
 import lombok.*;
 import org.hibernate.validator.constraints.CreditCardNumber;
+import org.springframework.data.cassandra.core.mapping.Column;
+import org.springframework.data.cassandra.core.mapping.PrimaryKey;
+import org.springframework.data.cassandra.core.mapping.Table;
 import sia.taco_cloud2.tacos.Taco;
+import sia.taco_cloud2.tacos.TacoUDT;
 
-import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -13,47 +17,51 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Data
-@Entity
-@AllArgsConstructor
-@NoArgsConstructor
+@Table("orders") // <1>
 public class TacoOrder implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @PrimaryKey  // <2>
+    private UUID id = Uuids.timeBased();
 
     private Date placedAt = new Date();
 
-    @NotBlank(message = "Delivery name is required")
+    // delivery and credit card properties omitted for brevity's sake
+
+    @NotBlank(message="Delivery name is required")
     private String deliveryName;
-    @NotBlank(message = "Street is required")
+
+    @NotBlank(message="Street is required")
     private String deliveryStreet;
-    @NotBlank(message = "City is required")
+
+    @NotBlank(message="City is required")
     private String deliveryCity;
-    @NotBlank(message = "State is required")
-    @Size(min = 2, message = "{validation.name.size.too_short}")
-    @Size(max = 2, message = "{validation.name.size.too_long}")
+
+    @NotBlank(message="State is required")
     private String deliveryState;
-    @NotBlank(message = "Zip code is required")
+
+    @NotBlank(message="Zip code is required")
     private String deliveryZip;
 
-    @CreditCardNumber(message = "Not a valid credit card number")
-    private String ccNumber;                //4827812830786985
-    @Pattern(regexp = "^(0[1-9]|1[0-2])([\\/])([2-9][0-9])$",
-            message = "Must be formatted MM/YY")
+    @CreditCardNumber(message="Not a valid credit card number")
+    private String ccNumber;
+
+    @Pattern(regexp="^(0[1-9]|1[0-2])([\\/])([2-9][0-9])$",
+            message="Must be formatted MM/YY")
     private String ccExpiration;
-    @Digits(integer = 3, fraction = 0, message = "Invalid CVV")
+
+    @Digits(integer=3, fraction=0, message="Invalid CVV")
     private String ccCVV;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Taco> tacos = new ArrayList<>();
+    @Column("tacos")  // <3>
+    private List<TacoUDT> tacos = new ArrayList<>();
 
-
-    public void addTaco(Taco taco) {
+    public void addTaco(TacoUDT taco) {
         this.tacos.add(taco);
     }
+
 }
