@@ -52,7 +52,7 @@ public class TacoOrder implements Serializable {
 
     @Pattern(regexp="^(0[1-9]|1[0-2])([\\/])([2-9][0-9])$",
             message="Must be formatted MM/YY")
-    private String ccExpiration;
+    private String ccExpiration;            //4827812830786985
 
     @Digits(integer=3, fraction=0, message="Invalid CVV")
     private String ccCVV;
