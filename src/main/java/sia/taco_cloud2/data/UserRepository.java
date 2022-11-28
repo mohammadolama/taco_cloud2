@@ -5,6 +5,6 @@ import sia.taco_cloud2.User;
 
 import java.util.UUID;
 
-public interface UserRepository extends CrudRepository<User, UUID> {
+public interface UserRepository extends CrudRepository<User, Long> {
     User findByUsername(String username);
 }

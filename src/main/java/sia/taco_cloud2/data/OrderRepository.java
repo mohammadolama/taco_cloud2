@@ -5,6 +5,6 @@ import sia.taco_cloud2.tacos.TacoOrder;
 
 import java.util.UUID;
 
-public interface OrderRepository extends CrudRepository<TacoOrder, UUID> {
+public interface OrderRepository extends CrudRepository<TacoOrder, String> {
 
 }

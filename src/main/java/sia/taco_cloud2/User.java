@@ -20,7 +20,7 @@ public class User implements UserDetails {
     private static final long serialersionUID = 1L;
 
     @Id
-    private String id;
+    private Long id;
 
     private final String username;
     private final String password;
