@@ -1,9 +1,10 @@
-package sia.taco_cloud2.web;
+package sia.taco_cloud2.tacos;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.CreditCardNumber;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import sia.taco_cloud2.User;
 import sia.taco_cloud2.tacos.Taco;
 
 import javax.validation.constraints.Digits;
@@ -53,6 +54,8 @@ public class TacoOrder implements Serializable {
     private String ccCVV;
 
     private List<Taco> tacos = new ArrayList<>();
+
+    private User user;
 
     public void addTaco(Taco taco) {
         this.tacos.add(taco);

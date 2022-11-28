@@ -50,43 +50,4 @@ public class TacoCloud2Application extends WebConfig {
         };
     }
 
-//    @Bean
-//    public CommandLineRunner dataLoader2(UserRepository repo) {
-//        return new CommandLineRunner() {
-//            @Override
-//            public void run(String... args) throws Exception {
-//                repo.save(new User("a", "a", "mohammad1", "hafez", "shiraz", "fars", "124", "=525"));
-//                repo.save(new User("b", "b", "mohammad2", "hafez", "shiraz", "fars", "124", "=525"));
-//                repo.save(new User("c", "c", "mohammad3", "hafez", "shiraz", "fars", "124", "=525"));
-//                repo.save(new User("d", "d", "mohammad4", "hafez", "shiraz", "fars", "124", "=525"));
-//            }
-//        };
-//    }
-
-    @Bean
-    public UserDetailsService userDetailsService(UserRepository userRepo) {
-        return username -> {
-            User user = userRepo.findByUsername(username);
-            if (user != null) return user;
-            throw new UsernameNotFoundException("User '" + username + "' not found");
-        };
-    }
-
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http
-                .authorizeRequests()
-                .antMatchers("/design", "/orders").access("hasRole('USER')")
-                .antMatchers("/", "/**").access("permitAll()")
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .loginProcessingUrl("/authenticate")
-                .usernameParameter("user")
-                .passwordParameter("pwd")
-                .defaultSuccessUrl("/design" , true)
-                .and()
-                .build();
-    }
-
 }

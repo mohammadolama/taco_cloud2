@@ -1,6 +1,8 @@
 package sia.taco_cloud2.tacos;
 
 import lombok.Data;
+import org.springframework.data.annotation.Id;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
@@ -11,6 +13,9 @@ import java.util.UUID;
 @Data
 
 public class Taco {
+
+    @Id
+    private String id;
 
     @NotNull
     @Size(min = 5, message = "Name must be at least 5 characters long")
