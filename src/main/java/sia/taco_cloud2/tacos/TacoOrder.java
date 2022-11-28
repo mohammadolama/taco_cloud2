@@ -53,11 +53,14 @@ public class TacoOrder implements Serializable {
     @Digits(integer=3, fraction=0, message="Invalid CVV")
     private String ccCVV;
 
-    private List<Taco> tacos = new ArrayList<>();
+    private List<Taco> tacos;
 
     private User user;
 
     public void addTaco(Taco taco) {
+        if (tacos == null){
+            tacos = new ArrayList<>();
+        }
         this.tacos.add(taco);
     }
 
