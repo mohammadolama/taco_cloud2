@@ -1,15 +1,13 @@
 package sia.taco_cloud2;
 
-import com.datastax.oss.driver.api.core.config.DefaultDriverOption;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.cassandra.DriverConfigLoaderBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import sia.taco_cloud2.data.IngredientRepository;
 import sia.taco_cloud2.tacos.Ingredient;
-import sia.taco_cloud2.web.WebConfig;
 import sia.taco_cloud2.tacos.Ingredient.Type;
+import sia.taco_cloud2.web.WebConfig;
 
 @SpringBootApplication
 public class TacoCloud2Application extends WebConfig {
